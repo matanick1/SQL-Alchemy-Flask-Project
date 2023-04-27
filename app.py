@@ -104,6 +104,7 @@ def temp_monthly():
     # Return the results
     return jsonify(temps)
 
+
 @app.route("/api/v1.0/temp/<start>")
 @app.route("/api/v1.0/temp/<start>/<end>")
 def stats(start=None,end=None):
@@ -113,13 +114,13 @@ def stats(start=None,end=None):
     # Select statement
     sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
     if not end:
-        # Calculate TMIN, TAVG, TMAX with start only
+    # Calculate TMIN, TAVG, TMAX with start only.
         results = session.query(*sel).\
-            filter(Measurement.date >= start).all()
-        # Unravel results into a 1D array and convert to a list
+        filter(Measurement.date >= start).all()
+    # Unravel results into a 1D array and convert to a list
         temps = list(np.ravel(results))
         return jsonify(temps)
-    # Calculate TMIN, TAVG, TMAX with start and stop
+    # Calculate TMIN, TAVG, TMAX with start and stop.
     results = session.query(*sel).\
         filter(Measurement.date >= start).\
         filter(Measurement.date <= end).all()
@@ -127,6 +128,7 @@ def stats(start=None,end=None):
     temps = list(np.ravel(results))
     # Close the session
     session.close()
+    # Return the results
     return jsonify(temps)
 
 if __name__ == '__main__':
